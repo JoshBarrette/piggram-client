@@ -17,24 +17,24 @@ export default function SideNav() {
       </Link>
 
       <div className="mt-6 flex w-full flex-grow flex-col space-y-4">
-        <NavButtonLink to="/">
-          <Home className="my-auto mr-1 size-8" />
+        <NavButtonLink to="/" className="group">
+          <Home className="my-auto mr-1 size-8 transition-all group-hover:scale-125" />
           <span className="hidden xl:block">Home</span>
         </NavButtonLink>
 
-        <NavButton>
-          <Search className="my-auto mr-1 size-8" />
+        <NavButtonLink to="about" className="group">
+          <Search className="my-auto mr-1 size-8 transition-all group-hover:scale-125" />
           <span className="hidden xl:block">Search</span>
-        </NavButton>
+        </NavButtonLink>
 
-        <NavButton>
-          <PlusSquare className="my-auto mr-1 size-8" />
+        <NavButtonLink to="upload" className="group">
+          <PlusSquare className="my-auto mr-1 size-8 transition-all group-hover:scale-125" />
           <span className="hidden xl:block">Post</span>
-        </NavButton>
+        </NavButtonLink>
 
         {isSignedIn && (
-          <NavButtonLink to={`/profile/${user?.userId}`}>
-            <Avatar className="mr-1 size-8">
+          <NavButtonLink to={`/profile/${user?.userId}`} className="group">
+            <Avatar className="mr-1 size-8 transition-all group-hover:scale-125">
               <AvatarImage src={user?.picture} alt={user?.firstName} />
               <AvatarFallback>PFP</AvatarFallback>
             </Avatar>
@@ -65,8 +65,8 @@ function OptionsDiv() {
             className="mx-auto w-12 xl:mr-2 xl:flex-grow"
             href={`${import.meta.env.VITE_APP_API_URL}/auth/google/login`}
           >
-            <NavButton variant="default">
-              <LogIn className="my-auto size-8 xl:mr-2" />
+            <NavButton variant="default" className="group">
+              <LogIn className="my-auto size-8 transition-all group-hover:scale-125 xl:mr-2" />
               <span className="hidden xl:block">Login</span>
             </NavButton>
           </a>

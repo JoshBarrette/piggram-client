@@ -11,7 +11,7 @@ function Index() {
   const theme = useTheme();
 
   return (
-    <div className="z-0 flex h-full w-full items-center justify-center md:w-full xl:absolute xl:w-screen">
+    <div className="left-0 z-0 flex h-full w-full items-center justify-center xl:absolute">
       <ScrollArea className="h-full w-full md:w-[650px]">
         <div className="flex h-full w-full flex-col items-center">
           <Button

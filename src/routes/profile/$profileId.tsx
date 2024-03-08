@@ -8,7 +8,7 @@ function Profile() {
   const { profileId } = Route.useParams();
 
   return (
-    <div className="h-full">
+    <div className="h-full w-full p-2">
       <p>profileId: {profileId}</p>
     </div>
   );

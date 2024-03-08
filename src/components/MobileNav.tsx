@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
 import { NavIconButton, NavIconButtonLink } from "./ui/nav-button";
-import { Home, PiggyBank, PlusSquare, Search, Settings } from "lucide-react";
+import { Home, LogIn, PiggyBank, PlusSquare, Search } from "lucide-react";
 import useUser from "~/hooks/useUser";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Link } from "@tanstack/react-router";
+import SettingsButton from "./settings-button";
 
 export default function MobileNav(props: { children: ReactNode }) {
   return (
@@ -16,31 +17,21 @@ export default function MobileNav(props: { children: ReactNode }) {
 }
 
 function BottomNav() {
-  const { user } = useUser();
-
   return (
     <div className="flex w-full items-center justify-between border-t border-neutral-700 px-20 py-1 md:hidden">
-      <NavIconButtonLink to="/">
-        <Home className="size-6" />
+      <NavIconButtonLink to="/" className="group">
+        <Home className="size-6 transition-all group-hover:scale-125" />
       </NavIconButtonLink>
 
-      <NavIconButtonLink to="about">
-        <Search className="size-6" />
+      <NavIconButtonLink to="about" className="group">
+        <Search className="size-6 transition-all group-hover:scale-125" />
       </NavIconButtonLink>
 
-      <NavIconButton>
-        <PlusSquare className="size-6" />
-      </NavIconButton>
-
-      <NavIconButtonLink
-        to={`/profile/${user?.userId}`}
-        className="hover:bg-transparent"
-      >
-        <Avatar className="my-auto mr-1 size-8">
-          <AvatarImage src={user?.picture} alt={user?.firstName} />
-          <AvatarFallback>PFP</AvatarFallback>
-        </Avatar>
+      <NavIconButtonLink to="upload" className="group">
+        <PlusSquare className="size-6 transition-all group-hover:scale-125" />
       </NavIconButtonLink>
+
+      <MobileUserButton />
     </div>
   );
 }
@@ -55,9 +46,30 @@ function TopNav() {
         </Link>
       </div>
 
-      <NavIconButton>
-        <Settings className="size-6" />
-      </NavIconButton>
+      <SettingsButton />
     </div>
+  );
+}
+
+function MobileUserButton() {
+  const { user, isSignedIn } = useUser();
+
+  return (
+    <>
+      {isSignedIn ? (
+        <NavIconButtonLink to={`/profile/${user?.userId}`} className="group">
+          <Avatar className="size-7 transform transition-all group-hover:scale-125">
+            <AvatarImage src={user?.picture} alt={user?.firstName} />
+            <AvatarFallback>PFP</AvatarFallback>
+          </Avatar>
+        </NavIconButtonLink>
+      ) : (
+        <a href={`${import.meta.env.VITE_APP_API_URL}/auth/google/login`}>
+          <NavIconButton className="group">
+            <LogIn className="size-6 transition-all group-hover:scale-125" />
+          </NavIconButton>
+        </a>
+      )}
+    </>
   );
 }

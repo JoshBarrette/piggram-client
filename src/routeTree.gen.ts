@@ -14,7 +14,9 @@ import { createFileRoute } from "@tanstack/react-router"
 
 import { Route as rootRoute } from "./routes/__root"
 import { Route as IndexImport } from "./routes/index"
-import { Route as ProfileProfileIdImport } from "./routes/profile.$profileId"
+import { Route as UploadIndexImport } from "./routes/upload/index"
+import { Route as ProfileProfileIdImport } from "./routes/profile/$profileId"
+import { Route as ProfileEditIndexImport } from "./routes/profile/edit/index"
 
 // Create Virtual Routes
 
@@ -32,8 +34,18 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const UploadIndexRoute = UploadIndexImport.update({
+  path: "/upload/",
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProfileProfileIdRoute = ProfileProfileIdImport.update({
   path: "/profile/$profileId",
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileEditIndexRoute = ProfileEditIndexImport.update({
+  path: "/profile/edit/",
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +65,14 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof ProfileProfileIdImport
       parentRoute: typeof rootRoute
     }
+    "/upload/": {
+      preLoaderRoute: typeof UploadIndexImport
+      parentRoute: typeof rootRoute
+    }
+    "/profile/edit/": {
+      preLoaderRoute: typeof ProfileEditIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -62,6 +82,8 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AboutLazyRoute,
   ProfileProfileIdRoute,
+  UploadIndexRoute,
+  ProfileEditIndexRoute,
 ])
 
 /* prettier-ignore-end */
