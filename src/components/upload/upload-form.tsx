@@ -2,19 +2,24 @@ import { useMutation } from "@tanstack/react-query";
 import { ChangeEvent, FormEvent, useRef } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import useFiles from "~/hooks/useFiles";
+import useImages from "~/hooks/useImages";
 import PreviewGrid from "./preview-grid";
+import { ImageSchema } from "~/lib/image-validation";
+import { useToast } from "../ui/use-toast";
+import axios from "axios";
 
 export default function UploadForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { files, setFiles, setPreviews } = useFiles();
+  const { images, setFiles, setPreviews } = useImages();
+  const { toast } = useToast();
+
   const mutation = useMutation({
     mutationFn: async (body: FormData) => {
-      const res = await fetch(`${import.meta.env.VITE_APP_API_URL}/posts/new`, {
-        method: "POST",
-        body,
-        credentials: "include",
-      }).then(async (res) => await res.json());
+      const res = await axios
+        .post(`${import.meta.env.VITE_APP_API_URL}/posts/new`, body, {
+          withCredentials: true,
+        })
+        .then((r) => r.data);
 
       console.log(res);
 
@@ -24,11 +29,11 @@ export default function UploadForm() {
 
   function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!files) return;
+    if (!images) return;
 
     const formData = new FormData();
-    files.forEach((currentFile, i) => {
-      formData.append(`picture-${i}`, currentFile);
+    images.forEach((currentFile, i) => {
+      formData.append(`image-${i}`, currentFile);
     });
 
     mutation.mutate(formData);
@@ -39,7 +44,18 @@ export default function UploadForm() {
     const newPreviews = new Array<string>();
 
     let newFiles: File[] = Array.from(e.target.files);
-    newFiles = newFiles.slice(0, 9);
+    newFiles = newFiles.slice(0, 9).filter((f) => {
+      const parse = ImageSchema.safeParse({ image: f });
+      if (parse.success) return true;
+
+      toast({
+        title: `Failed to upload ${f.name}`,
+        description: parse.error.issues[0].message,
+      });
+      return false;
+    });
+    setFiles(newFiles);
+
     newFiles.forEach((f) => {
       let reader = new FileReader();
       reader.readAsDataURL(f);
@@ -50,8 +66,6 @@ export default function UploadForm() {
         }
       };
     });
-
-    setFiles(newFiles);
   }
 
   return (
@@ -77,9 +91,9 @@ export default function UploadForm() {
         <PreviewGrid />
 
         <Button
-          className={`mx-auto h-12 px-6 text-xl font-semibold ${files.length === 0 && "invisible"}`}
+          className={`mx-auto h-12 px-6 text-xl font-semibold ${images.length === 0 && "invisible"}`}
           type="submit"
-          disabled={files.length === 0}
+          disabled={images.length === 0}
         >
           Post
         </Button>

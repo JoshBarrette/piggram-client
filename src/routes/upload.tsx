@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import { Toaster } from "~/components/ui/toaster";
 import UploadForm from "~/components/upload/upload-form";
 import { isAuthed } from "~/lib/utils";
 
@@ -14,6 +15,7 @@ function Upload() {
       <ScrollArea>
         <div>
           <UploadForm />
+          <Toaster />
         </div>
       </ScrollArea>
     </div>

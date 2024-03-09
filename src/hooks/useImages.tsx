@@ -1,20 +1,20 @@
 import { create } from "zustand";
 
-export default function useFiles() {
+export default function useImages() {
   return {
-    ...useFilesStore(),
+    ...useImagesStore(),
   };
 }
 
-const useFilesStore = create<FilesState>((set) => ({
-  files: [],
+const useImagesStore = create<ImagesState>((set) => ({
+  images: [],
   previews: [],
-  setFiles: (f: File[]) => set(() => ({ files: f })),
+  setFiles: (f: File[]) => set(() => ({ images: f })),
   setPreviews: (s: string[]) => set(() => ({ previews: s })),
 }));
 
-interface FilesState {
-  files: File[];
+interface ImagesState {
+  images: File[];
   previews: string[];
   setFiles: (f: File[]) => void;
   setPreviews: (s: string[]) => void;

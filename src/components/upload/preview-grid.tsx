@@ -2,20 +2,20 @@ import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
-import useFiles from "~/hooks/useFiles";
+import useImages from "~/hooks/useImages";
 
 export default function PreviewGrid() {
-  const { files, setFiles, previews, setPreviews } = useFiles();
+  const { images, setFiles, previews, setPreviews } = useImages();
   const [emptyArr, setEmptyArr] = useState<number[]>(new Array().fill(0));
 
   function removePicture(i: number) {
-    setFiles([...files.slice(0, i), ...files.slice(i + 1)]);
+    setFiles([...images.slice(0, i), ...images.slice(i + 1)]);
     setPreviews([...previews.slice(0, i), ...previews.slice(i + 1)]);
   }
 
   useEffect(() => {
-    setEmptyArr(new Array(9 - files.length).fill(0));
-  }, [files]);
+    setEmptyArr(new Array(9 - images.length).fill(0));
+  }, [images]);
 
   return (
     <div className="flex">
