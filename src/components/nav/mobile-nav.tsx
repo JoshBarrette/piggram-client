@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
-import { NavIconButton, NavIconButtonLink } from "./ui/nav-button";
+import { NavIconButton, NavIconButtonLink } from "../ui/nav-button";
 import { Home, LogIn, PiggyBank, PlusSquare, Search } from "lucide-react";
 import useUser from "~/hooks/useUser";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link } from "@tanstack/react-router";
 import SettingsButton from "./settings-button";
 

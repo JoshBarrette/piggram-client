@@ -1,7 +1,7 @@
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import "../index.css";
-import SideNav from "~/components/SideNav";
-import MobileNav from "~/components/MobileNav";
+import SideNav from "~/components/nav/side-nav";
+import MobileNav from "~/components/nav/mobile-nav";
 
 export const Route = createRootRoute({
   component: () => (

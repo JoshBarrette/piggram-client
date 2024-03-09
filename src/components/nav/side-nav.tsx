@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import useUser from "../hooks/useUser";
-import { ThemeToggle } from "./theme-toggle";
-import { NavButton, NavButtonLink } from "./ui/nav-button";
+import useUser from "../../hooks/useUser";
+import { ThemeToggle } from "../theme/theme-toggle";
+import { NavButton, NavButtonLink } from "../ui/nav-button";
 import UserDropdown from "./user-dropdown";
 import { Home, Search, PlusSquare, LogIn, PiggyBank } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 export default function SideNav() {
   const { isSignedIn, user } = useUser();

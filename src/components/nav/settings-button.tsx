@@ -1,43 +1,31 @@
-import useUser from "~/hooks/useUser";
+import { Settings } from "lucide-react";
+import { NavIconButton } from "../ui/nav-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
-import { useTheme } from "./theme-provider";
+} from "../ui/dropdown-menu";
+import { useTheme } from "../theme/theme-provider";
+import useUser from "~/hooks/useUser";
 
-export default function UserDropdown() {
-  const { signOut } = useUser();
+export default function SettingsButton() {
   const theme = useTheme();
+  const { signOut, isSignedIn } = useUser();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="w-full py-6">
-          <span className="flex w-full items-center">
-            <Menu className="mx-auto size-6 xl:ml-0 xl:mr-2" />
-            <span className="my-auto hidden text-xl font-semibold xl:block">
-              More
-            </span>
-          </span>
-        </Button>
+        <NavIconButton className="group">
+          <Settings className="size-6 transition-all group-hover:size-8" />
+        </NavIconButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuLabel className="text-xl font-semibold">
-          Options
-        </DropdownMenuLabel>
-
-        <DropdownMenuSeparator />
-
+      <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuSub>
           <DropdownMenuSubTrigger className="text-xl font-semibold">
             Theme
@@ -67,9 +55,11 @@ export default function UserDropdown() {
           </DropdownMenuPortal>
         </DropdownMenuSub>
 
-        <DropdownMenuItem className="text-xl font-semibold" onClick={signOut}>
-          Sign Out
-        </DropdownMenuItem>
+        {isSignedIn && (
+          <DropdownMenuItem className="text-xl font-semibold" onClick={signOut}>
+            Sign Out
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

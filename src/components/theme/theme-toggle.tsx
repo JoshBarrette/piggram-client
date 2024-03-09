@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useTheme } from "~/components/theme-provider";
+import { useTheme } from "./theme-provider";
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();

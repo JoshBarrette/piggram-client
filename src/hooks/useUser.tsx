@@ -2,6 +2,7 @@ import * as jose from "jose";
 import Cookies from "js-cookie";
 import { create } from "zustand";
 import { router } from "~/main";
+import { UserJwt, UserState, UserStateObj } from "./types/user-types";
 
 export default function useUser() {
   const { user, signOut } = useUserStore();
@@ -17,7 +18,7 @@ export default function useUser() {
 }
 
 const useUserStore = create<UserState>((set) => ({
-  user: getInitialState(),
+  user: getSignInState(),
   signOut: () =>
     set(() => {
       Cookies.remove(import.meta.env.VITE_APP_JWT_COOKIE_NAME);
@@ -25,15 +26,18 @@ const useUserStore = create<UserState>((set) => ({
     }),
 }));
 
-function getInitialState(): UserStateObj {
+export function getSignInState(): UserStateObj {
   const token = Cookies.get(import.meta.env.VITE_APP_JWT_COOKIE_NAME);
   if (!token) return null;
 
   const jwt: UserJwt = jose.decodeJwt(token);
   const currentTime = Date.now() / 1000;
-  const tokenIsValid = jwt.exp > currentTime;
+  const tokenIsExpired = jwt.exp * 1000 < currentTime;
 
-  if (!tokenIsValid) {
+  if (tokenIsExpired) {
+    Cookies.remove(import.meta.env.VITE_APP_JWT_COOKIE_NAME);
+    return null;
+  } else if (!UserJwt.safeParse(jwt).success) {
     Cookies.remove(import.meta.env.VITE_APP_JWT_COOKIE_NAME);
     return null;
   }
@@ -44,26 +48,4 @@ function getInitialState(): UserStateObj {
     lastName: jwt.lastName,
     picture: jwt.picture,
   };
-}
-
-type UserJwt = {
-  userId: string;
-  firstName: string;
-  lastName?: string;
-  email: string;
-  picture: string;
-  exp: number;
-  iat: number;
-};
-
-type UserStateObj = {
-  userId: string;
-  firstName: string;
-  lastName?: string;
-  picture: string;
-} | null;
-
-interface UserState {
-  user: UserStateObj;
-  signOut: () => void;
 }
