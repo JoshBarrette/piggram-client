@@ -4,14 +4,11 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import useImages from "~/hooks/useImages";
 import PreviewGrid from "./preview-grid";
-import { ImageSchema } from "~/lib/image-validation";
-import { useToast } from "../ui/use-toast";
 import axios from "axios";
 
 export default function UploadForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { images, setFiles, setPreviews } = useImages();
-  const { toast } = useToast();
+  const { images, setImages } = useImages();
 
   const mutation = useMutation({
     mutationFn: async (body: FormData) => {
@@ -41,31 +38,8 @@ export default function UploadForm() {
 
   function handleFilesChange(e: ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
-    const newPreviews = new Array<string>();
 
-    let newFiles: File[] = Array.from(e.target.files);
-    newFiles = newFiles.slice(0, 9).filter((f) => {
-      const parse = ImageSchema.safeParse({ image: f });
-      if (parse.success) return true;
-
-      toast({
-        title: `Failed to upload ${f.name}`,
-        description: parse.error.issues[0].message,
-      });
-      return false;
-    });
-    setFiles(newFiles);
-
-    newFiles.forEach((f) => {
-      let reader = new FileReader();
-      reader.readAsDataURL(f);
-      reader.onloadend = () => {
-        if (typeof reader.result === "string") {
-          newPreviews.push(reader.result);
-          setPreviews([...newPreviews]); // this needs to be here :(
-        }
-      };
-    });
+    setImages([...e.target.files]);
   }
 
   return (
