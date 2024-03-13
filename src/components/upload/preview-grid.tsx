@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import useImages from "~/hooks/useImages";
 
-export default function PreviewGrid() {
+export default function PreviewGrid({ isPending }: { isPending: boolean }) {
   const { images, previews } = useImages();
   const [emptyArr, setEmptyArr] = useState<number[]>(new Array().fill(0));
 
@@ -16,18 +16,26 @@ export default function PreviewGrid() {
     <div className="flex">
       <div className={`grid grid-cols-3 gap-2`}>
         {previews.map((pre, i) => (
-          <PreviewCard preview={pre} index={i} key={i} />
+          <PreviewCard preview={pre} index={i} isPending={isPending} key={i} />
         ))}
 
         {emptyArr.map((_, i) => (
-          <EmptyCard key={i} />
+          <EmptyCard isPending={isPending} key={i} />
         ))}
       </div>
     </div>
   );
 }
 
-function PreviewCard({ preview, index }: { preview: string; index: number }) {
+function PreviewCard({
+  preview,
+  index,
+  isPending,
+}: {
+  preview: string;
+  index: number;
+  isPending: boolean;
+}) {
   const { images, setImages, removeImage } = useImages();
 
   function handleOnDrag(e: DragEvent) {
@@ -44,7 +52,7 @@ function PreviewCard({ preview, index }: { preview: string; index: number }) {
 
   return (
     <Card
-      className="group relative flex size-48 items-center justify-center overflow-hidden"
+      className="group relative flex size-40 items-center justify-center overflow-hidden"
       draggable
       onDragStart={handleOnDrag}
       onDrop={handleDragDrop}
@@ -55,6 +63,7 @@ function PreviewCard({ preview, index }: { preview: string; index: number }) {
         variant="secondary"
         onClick={() => removeImage(index)}
         type="button"
+        disabled={isPending}
       >
         <X className="absolute left-[3px] top-[2px] size-7" />
       </Button>
@@ -66,7 +75,7 @@ function PreviewCard({ preview, index }: { preview: string; index: number }) {
   );
 }
 
-function EmptyCard() {
+function EmptyCard({ isPending }: { isPending: boolean }) {
   const { images, setImages, moveImageToEnd } = useImages();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -96,8 +105,9 @@ function EmptyCard() {
         onClick={() => inputRef.current?.click()}
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDragDrop}
+        disabled={isPending}
       >
-        <Card className="group relative flex size-48 items-center justify-center overflow-hidden">
+        <Card className="group relative flex size-40 items-center justify-center overflow-hidden">
           <PlusSquare className="size-10 text-neutral-500 transition-all group-hover:size-12" />
         </Card>
       </button>

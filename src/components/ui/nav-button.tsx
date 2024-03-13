@@ -2,7 +2,6 @@ import { forwardRef } from "react";
 import { Button } from "./button";
 import { cn } from "~/lib/utils";
 import { Link } from "@tanstack/react-router";
-import useUser from "~/hooks/useUser";
 
 export const NavButton = forwardRef<
   React.ElementRef<typeof Button>,
@@ -52,20 +51,9 @@ export const NavButtonLink = forwardRef<
     linkClassName?: string | undefined;
   }
 >(({ className, children, to, linkClassName, ...props }, ref) => {
-  const { isSignedIn } = useUser();
-
   return (
-    <Link
-      to={to}
-      className={cn("w-full", linkClassName)}
-      disabled={to.includes("upload") && !isSignedIn}
-    >
-      <NavButton
-        className={className}
-        ref={ref}
-        {...props}
-        disabled={to.includes("upload") && !isSignedIn}
-      >
+    <Link to={to} className={cn("w-full", linkClassName)}>
+      <NavButton className={className} ref={ref} {...props}>
         {children}
       </NavButton>
     </Link>
@@ -80,20 +68,9 @@ export const NavIconButtonLink = forwardRef<
     linkClassName?: string | undefined;
   }
 >(({ className, children, to, linkClassName, ...props }, ref) => {
-  const { isSignedIn } = useUser();
-
   return (
-    <Link
-      to={to}
-      className={linkClassName}
-      disabled={to.includes("upload") && !isSignedIn}
-    >
-      <NavIconButton
-        className={className}
-        ref={ref}
-        {...props}
-        disabled={to.includes("upload") && !isSignedIn}
-      >
+    <Link to={to} className={linkClassName}>
+      <NavIconButton className={className} ref={ref} {...props}>
         {children}
       </NavIconButton>
     </Link>

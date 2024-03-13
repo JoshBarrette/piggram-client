@@ -5,12 +5,17 @@ import { Input } from "~/components/ui/input";
 import useImages from "~/hooks/useImages";
 import PreviewGrid from "./preview-grid";
 import axios from "axios";
+import { Textarea } from "../ui/textarea";
+import useUser from "~/hooks/useUser";
 
 export default function UploadForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const captionRef = useRef<HTMLTextAreaElement | null>(null);
   const { images, setImages } = useImages();
+  const { isSignedIn } = useUser();
 
-  const mutation = useMutation({
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["upload"],
     mutationFn: async (body: FormData) => {
       const res = await axios
         .post(`${import.meta.env.VITE_APP_API_URL}/posts/new`, body, {
@@ -20,25 +25,28 @@ export default function UploadForm() {
 
       console.log(res);
 
-      return { valid: true };
+      return res;
     },
   });
 
   function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!images) return;
+    if (!images || !captionRef.current || !isSignedIn) return;
 
     const formData = new FormData();
     images.forEach((currentFile, i) => {
       formData.append(`image-${i}`, currentFile);
     });
 
-    mutation.mutate(formData);
+    if (captionRef.current.value) {
+      formData.append("caption", captionRef.current.value.trim());
+    }
+
+    mutate(formData);
   }
 
   function handleFilesChange(e: ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
-
     setImages([...e.target.files]);
   }
 
@@ -49,25 +57,38 @@ export default function UploadForm() {
         onClick={() => {
           fileInputRef.current?.click();
         }}
+        disabled={isPending}
       >
         Select Pictures to Post
       </Button>
 
-      <form onSubmit={handleFormSubmit} className="flex flex-col space-y-4">
+      <form
+        onSubmit={handleFormSubmit}
+        className="flex flex-col space-y-4 px-1"
+      >
         <Input
           type="file"
           onChange={handleFilesChange}
           ref={fileInputRef}
           className="hidden"
           multiple
+          disabled={isPending}
         />
 
-        <PreviewGrid />
+        <PreviewGrid isPending={isPending} />
+
+        <Textarea
+          placeholder="Post Caption"
+          ref={captionRef}
+          maxLength={250}
+          className="min-h-20 resize-none"
+          disabled={isPending}
+        />
 
         <Button
           className={`mx-auto h-12 px-6 text-xl font-semibold ${images.length === 0 && "invisible"}`}
           type="submit"
-          disabled={images.length === 0}
+          disabled={images.length === 0 || isPending || !isSignedIn}
         >
           Post
         </Button>
