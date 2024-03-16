@@ -27,6 +27,11 @@ export default function UploadForm() {
 
       return res;
     },
+    onSuccess: (data) => {
+      console.log(data);
+      // TODO: navigate to the new post
+      // router.navigate({ to: "/" });
+    },
   });
 
   function handleFormSubmit(e: FormEvent<HTMLFormElement>) {
@@ -37,7 +42,6 @@ export default function UploadForm() {
     images.forEach((currentFile, i) => {
       formData.append(`image-${i}`, currentFile);
     });
-
     if (captionRef.current.value) {
       formData.append("caption", captionRef.current.value.trim());
     }

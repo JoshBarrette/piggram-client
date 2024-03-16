@@ -17,7 +17,9 @@ import { Route as UploadImport } from './routes/upload'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileProfileIdImport } from './routes/profile/$profileId'
+import { Route as PIdImport } from './routes/p.$id'
 import { Route as ProfileEditIndexImport } from './routes/profile/edit.index'
+import { Route as PIdCommentImport } from './routes/p.$id.comment'
 
 // Create Virtual Routes
 
@@ -50,9 +52,19 @@ const ProfileProfileIdRoute = ProfileProfileIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PIdRoute = PIdImport.update({
+  path: '/p/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const ProfileEditIndexRoute = ProfileEditIndexImport.update({
   path: '/profile/edit/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const PIdCommentRoute = PIdCommentImport.update({
+  path: '/comment',
+  getParentRoute: () => PIdRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -75,9 +87,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLazyImport
       parentRoute: typeof rootRoute
     }
+    '/p/$id': {
+      preLoaderRoute: typeof PIdImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/$profileId': {
       preLoaderRoute: typeof ProfileProfileIdImport
       parentRoute: typeof rootRoute
+    }
+    '/p/$id/comment': {
+      preLoaderRoute: typeof PIdCommentImport
+      parentRoute: typeof PIdImport
     }
     '/profile/edit/': {
       preLoaderRoute: typeof ProfileEditIndexImport
@@ -93,6 +113,7 @@ export const routeTree = rootRoute.addChildren([
   AuthRoute,
   UploadRoute,
   AboutLazyRoute,
+  PIdRoute.addChildren([PIdCommentRoute]),
   ProfileProfileIdRoute,
   ProfileEditIndexRoute,
 ])

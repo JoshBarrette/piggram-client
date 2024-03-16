@@ -51,13 +51,16 @@ function PreviewCard({
   }
 
   return (
-    <Card
-      className="group relative flex size-40 items-center justify-center overflow-hidden"
-      draggable
-      onDragStart={handleOnDrag}
-      onDrop={handleDragDrop}
-      onDragOver={(e) => e.preventDefault()}
-    >
+    <div className="group relative">
+      <Card
+        className="flex size-40 items-center justify-center overflow-hidden transition-all group-hover:scale-110"
+        draggable
+        onDragStart={handleOnDrag}
+        onDrop={handleDragDrop}
+        onDragOver={(e) => e.preventDefault()}
+      >
+        <img src={preview} className="w-full" />
+      </Card>
       <Button
         className="absolute right-2 top-2 z-20 size-8 rounded-full"
         variant="secondary"
@@ -67,11 +70,7 @@ function PreviewCard({
       >
         <X className="absolute left-[3px] top-[2px] size-7" />
       </Button>
-      <img
-        src={preview}
-        className="w-full transition-all group-hover:scale-110"
-      />
-    </Card>
+    </div>
   );
 }
 
