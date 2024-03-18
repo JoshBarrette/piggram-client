@@ -7,30 +7,33 @@ import PreviewGrid from "./preview-grid";
 import axios from "axios";
 import { Textarea } from "../ui/textarea";
 import useUser from "~/hooks/useUser";
+import { UploadResponse } from "~/types/posts";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function UploadForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const captionRef = useRef<HTMLTextAreaElement | null>(null);
+  const nav = useNavigate();
   const { images, setImages } = useImages();
   const { isSignedIn } = useUser();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["upload"],
-    mutationFn: async (body: FormData) => {
-      const res = await axios
+    mutationFn: async (body: FormData): Promise<UploadResponse> => {
+      return await axios
         .post(`${import.meta.env.VITE_APP_API_URL}/posts/new`, body, {
           withCredentials: true,
         })
         .then((r) => r.data);
-
-      console.log(res);
-
-      return res;
     },
     onSuccess: (data) => {
-      console.log(data);
-      // TODO: navigate to the new post
-      // router.navigate({ to: "/" });
+      console.log("upload response", data);
+      if (data.newPost) {
+        nav({ to: "/p/" + data.newPost._id });
+      }
+    },
+    onError: () => {
+      // TODO
     },
   });
 

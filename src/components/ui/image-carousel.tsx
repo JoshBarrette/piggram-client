@@ -39,14 +39,14 @@ export default function ImageCarousel({ imageUrls }: { imageUrls: string[] }) {
   }, [current]);
 
   return (
-    <Carousel setApi={setApi} className="w-[500px] xl:w-[700px]">
+    <Carousel setApi={setApi} className="w-[500px]">
       <CarouselContent>
         {imageUrls.map((imageUrl, index) => (
           <CarouselItem
             key={index}
             className="flex items-center justify-center"
           >
-            <Card className="flex size-[500px] items-center justify-center overflow-hidden rounded-md xl:size-[700px]">
+            <Card className="flex size-[500px] items-center justify-center overflow-hidden rounded-md">
               <img
                 src={import.meta.env.VITE_APP_CDN_URL + imageUrl}
                 alt={`image ${index}`}
@@ -60,14 +60,16 @@ export default function ImageCarousel({ imageUrls }: { imageUrls: string[] }) {
       {current !== 1 && <CarouselPrevious className="left-4" />}
       {current !== imageUrls.length && <CarouselNext className="right-4" />}
 
-      <div className="absolute bottom-3 flex w-full justify-center space-x-1.5">
-        {selectedArr.map((sel, i) => (
-          <div
-            key={i}
-            className={`size-2 rounded-full bg-white ${!sel && "opacity-50"}`}
-          />
-        ))}
-      </div>
+      {imageUrls.length > 1 && (
+        <div className="absolute bottom-3 flex w-full justify-center space-x-1.5">
+          {selectedArr.map((sel, i) => (
+            <div
+              key={i}
+              className={`size-2 rounded-full bg-white ${!sel && "opacity-50"}`}
+            />
+          ))}
+        </div>
+      )}
     </Carousel>
   );
 }
