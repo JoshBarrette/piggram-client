@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { NavIconButton, NavIconButtonLink } from "../ui/nav-button";
+import { NavIconButton, NavIconButtonLink } from "./nav-button";
 import { Home, LogIn, PiggyBank, PlusSquare, Search } from "lucide-react";
 import useUser from "~/hooks/useUser";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -23,7 +23,7 @@ function BottomNav() {
         <Home className="size-6 transition-all group-hover:scale-125" />
       </NavIconButtonLink>
 
-      <NavIconButtonLink to="about" className="group">
+      <NavIconButtonLink to="/" className="group">
         <Search className="size-6 transition-all group-hover:scale-125" />
       </NavIconButtonLink>
 

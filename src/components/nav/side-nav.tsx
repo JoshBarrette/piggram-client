@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import useUser from "../../hooks/useUser";
 import { ThemeToggle } from "../theme/theme-toggle";
-import { NavButton, NavButtonLink } from "../ui/nav-button";
+import { NavButton, NavButtonLink } from "./nav-button";
 import UserDropdown from "./user-dropdown";
 import { Home, Search, PlusSquare, LogIn, PiggyBank } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -22,7 +22,7 @@ export default function SideNav() {
           <span className="hidden xl:block">Home</span>
         </NavButtonLink>
 
-        <NavButtonLink to="about" className="group">
+        <NavButtonLink to="/" className="group">
           <Search className="my-auto mr-1 size-8 transition-all group-hover:scale-125" />
           <span className="hidden xl:block">Search</span>
         </NavButtonLink>

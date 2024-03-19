@@ -5,7 +5,7 @@ import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "./components/theme/theme-provider";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
 
 export const router = createRouter({
   routeTree,
@@ -13,6 +13,8 @@ export const router = createRouter({
     queryClient,
     user: undefined,
   },
+  defaultPreload: "intent",
+  defaultPreloadStaleTime: 0,
 });
 
 declare module "@tanstack/react-router" {

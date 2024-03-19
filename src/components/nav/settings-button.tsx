@@ -1,5 +1,5 @@
 import { Settings } from "lucide-react";
-import { NavIconButton } from "../ui/nav-button";
+import { NavIconButton } from "./nav-button";
 import {
   DropdownMenu,
   DropdownMenuContent,

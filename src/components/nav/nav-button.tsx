@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Button } from "./button";
+import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
 import { Link } from "@tanstack/react-router";
 

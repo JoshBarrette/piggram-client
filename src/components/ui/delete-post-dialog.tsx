@@ -9,12 +9,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./alert-dialog";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { OptionsButton } from "./options-button";
 import { buttonVariants } from "./button";
 
 export default function DeletePostDialog({ postId }: { postId: string }) {
+  const queryClient = useQueryClient();
   const del = useMutation({
     mutationKey: ["delete"],
     mutationFn: async () => {
@@ -22,8 +23,10 @@ export default function DeletePostDialog({ postId }: { postId: string }) {
         `${import.meta.env.VITE_APP_API_URL}/posts/delete/${postId}`,
         { withCredentials: true },
       );
-      console.log(deleted.data);
       return deleted.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 

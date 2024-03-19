@@ -27,7 +27,6 @@ export default function UploadForm() {
         .then((r) => r.data);
     },
     onSuccess: (data) => {
-      console.log("upload response", data);
       if (data.newPost) {
         nav({ to: "/p/" + data.newPost._id });
       }

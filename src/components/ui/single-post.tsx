@@ -17,6 +17,7 @@ import { buttonVariants } from "./button";
 import useUser from "~/hooks/useUser";
 import { OptionsButton } from "./options-button";
 import DeletePostDialog from "./delete-post-dialog";
+import CommentInput from "./comment-input";
 
 export default function SinglePost({ post }: { post: PiggramPost }) {
   const name: string =
@@ -26,7 +27,10 @@ export default function SinglePost({ post }: { post: PiggramPost }) {
   return (
     <div className="flex w-[500px] flex-col space-y-1">
       <div className="flex pb-1">
-        <Link to="/" className="flex items-center space-x-2">
+        <Link
+          to={"/profile/" + post.poster._id}
+          className="flex items-center space-x-2"
+        >
           <Avatar className="size-8">
             <AvatarImage src={post.poster.picture} alt={name} />
             <AvatarFallback>PFP</AvatarFallback>
@@ -48,7 +52,10 @@ export default function SinglePost({ post }: { post: PiggramPost }) {
       </div>
 
       <div className="flex w-full space-x-2">
-        <Link to="/" className="whitespace-nowrap font-semibold">
+        <Link
+          to={"/profile/" + post.poster._id}
+          className="whitespace-nowrap font-semibold"
+        >
           {name}
         </Link>
         <p className="truncate overflow-ellipsis">{post.caption}</p>
@@ -57,8 +64,10 @@ export default function SinglePost({ post }: { post: PiggramPost }) {
       <p>
         {post.comments === 0
           ? "No comments"
-          : `View all ${post.comments} comment${post.comments !== 1 && "s"}}`}
+          : `View all ${post.comments} comment${post.comments !== 1 ? "s" : ""}`}
       </p>
+
+      <CommentInput postId={post._id} />
     </div>
   );
 }
