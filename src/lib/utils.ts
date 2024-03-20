@@ -1,13 +1,14 @@
 import { redirect } from "@tanstack/react-router";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { UserStateObj } from "~/hooks/types/user-types";
 import { getSignInState } from "~/hooks/useUser";
 
-export function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-export function isAuthed() {
+export function isAuthed(): UserStateObj {
   const state = getSignInState();
 
   if (!state) {
@@ -17,6 +18,10 @@ export function isAuthed() {
   }
 
   return state;
+}
+
+export function getFullName(firstName: string, lastName?: string): string {
+  return firstName + (lastName && ` ${lastName}`);
 }
 
 export function getRelativeTime(date: Date): string {
@@ -29,12 +34,12 @@ export function getRelativeTime(date: Date): string {
   const days = Math.floor(hours / 24);
 
   if (days > 0) {
-    return `${days} day${days > 1 ? "s" : ""} ago`;
+    return `${days}d`;
   } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    return `${hours}h`;
   } else if (minutes > 0) {
-    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    return `${minutes}m`;
   } else {
-    return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
+    return `${seconds}s`;
   }
 }

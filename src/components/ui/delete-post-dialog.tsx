@@ -14,19 +14,29 @@ import axios from "axios";
 import { OptionsButton } from "./options-button";
 import { buttonVariants } from "./button";
 
-export default function DeletePostDialog({ postId }: { postId: string }) {
+export default function DeletePostDialog({
+  id,
+  type,
+  invalidateID,
+}: {
+  id: string;
+  type: "comment" | "post";
+  invalidateID?: string;
+}) {
+  const invalidateQueries =
+    type === "post" ? ["post"] : [`post-${invalidateID}`];
   const queryClient = useQueryClient();
   const del = useMutation({
     mutationKey: ["delete"],
     mutationFn: async () => {
       const deleted = await axios.delete(
-        `${import.meta.env.VITE_APP_API_URL}/posts/delete/${postId}`,
+        `${import.meta.env.VITE_APP_API_URL}/${type}s/delete/${id}`,
         { withCredentials: true },
       );
       return deleted.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: invalidateQueries });
     },
   });
 
@@ -38,11 +48,11 @@ export default function DeletePostDialog({ postId }: { postId: string }) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure you want to delete this post?
+            Are you absolutely sure you want to delete this {type}?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete your
-            post.
+            {" " + type}.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

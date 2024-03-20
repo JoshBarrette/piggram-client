@@ -39,6 +39,7 @@ export default function CommentInput({ postId }: { postId: string }) {
         return;
       }
       inputRef.current.value = "";
+      setShowButton(false);
     },
   });
 
@@ -47,7 +48,13 @@ export default function CommentInput({ postId }: { postId: string }) {
   }
 
   return (
-    <div className="relative flex items-center">
+    <form
+      className="relative flex items-center"
+      onSubmit={(e) => {
+        e.preventDefault();
+        mutate();
+      }}
+    >
       <Input
         placeholder="Add a comment"
         className="pr-14"
@@ -60,12 +67,12 @@ export default function CommentInput({ postId }: { postId: string }) {
         <Button
           variant="ghost"
           className="absolute right-2 h-6 px-2"
-          onClick={() => mutate()}
           disabled={isPending || !isSignedIn}
+          type="submit"
         >
           Post
         </Button>
       )}
-    </div>
+    </form>
   );
 }

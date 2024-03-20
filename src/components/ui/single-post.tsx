@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { getRelativeTime } from "~/lib/utils";
+import { getFullName, getRelativeTime } from "~/lib/utils";
 import { PiggramPost } from "~/types/posts";
 import ImageCarousel from "./image-carousel";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
@@ -18,11 +18,10 @@ import useUser from "~/hooks/useUser";
 import { OptionsButton } from "./options-button";
 import DeletePostDialog from "./delete-post-dialog";
 import CommentInput from "./comment-input";
+import CommentsDialog from "./comments-dialog";
 
 export default function SinglePost({ post }: { post: PiggramPost }) {
-  const name: string =
-    post.poster.firstName +
-    (post.poster.lastName && ` ${post.poster.lastName}`);
+  const name = getFullName(post.poster.firstName, post.poster.lastName);
 
   return (
     <div className="flex w-[500px] flex-col space-y-1">
@@ -61,11 +60,7 @@ export default function SinglePost({ post }: { post: PiggramPost }) {
         <p className="truncate overflow-ellipsis">{post.caption}</p>
       </div>
 
-      <p>
-        {post.comments === 0
-          ? "No comments"
-          : `View all ${post.comments} comment${post.comments !== 1 ? "s" : ""}`}
-      </p>
+      <CommentsDialog commentsCount={post.comments} postID={post._id} />
 
       <CommentInput postId={post._id} />
     </div>
@@ -97,7 +92,9 @@ function PostOptions({
           <OptionsButton>test button</OptionsButton>
           <OptionsButton>test button</OptionsButton>
 
-          {user?.userId === posterId && <DeletePostDialog postId={postId} />}
+          {user?.userId === posterId && (
+            <DeletePostDialog id={postId} type="post" />
+          )}
 
           <CloseButton
             className={buttonVariants({
