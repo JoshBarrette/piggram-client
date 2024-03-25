@@ -88,9 +88,24 @@ function PostOptions({
           <DialogTitle className="text-xl">Options</DialogTitle>
         </DialogHeader>
         <div className="flex w-full flex-col">
-          <OptionsButton>test button</OptionsButton>
-          <OptionsButton>test button</OptionsButton>
-          <OptionsButton>test button</OptionsButton>
+          <OptionsButton
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${import.meta.env.VITE_APP_BASE_URL}/p/${postId}`,
+              );
+            }}
+          >
+            Copy link to post
+          </OptionsButton>
+          <OptionsButton
+            onClick={() =>
+              navigator.clipboard.writeText(
+                `${import.meta.env.VITE_APP_BASE_URL}/profile/${posterId}`,
+              )
+            }
+          >
+            Copy link to poster
+          </OptionsButton>
 
           {user?.userId === posterId && (
             <DeletePostDialog id={postId} type="post" />

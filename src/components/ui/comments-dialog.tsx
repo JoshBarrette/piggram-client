@@ -29,7 +29,11 @@ export default function CommentsDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="block h-6 py-0 pl-0 text-left" variant="link">
+        <Button
+          className="block h-6 py-0 pl-0 text-left"
+          disabled={commentsCount === 0}
+          variant="link"
+        >
           {commentsCount === 0
             ? "No comments"
             : `View all ${commentsCount} comment${commentsCount !== 1 ? "s" : ""}`}
@@ -141,7 +145,15 @@ function CommentOptions({
           <DialogTitle className="text-xl">Options</DialogTitle>
         </DialogHeader>
         <div className="flex w-full flex-col">
-          <OptionsButton>test button</OptionsButton>
+          <OptionsButton
+            onClick={() =>
+              navigator.clipboard.writeText(
+                `${import.meta.env.VITE_APP_BASE_URL}/profile/${commenterID}`,
+              )
+            }
+          >
+            Copy link to commenter
+          </OptionsButton>
 
           {user?.userId === commenterID && (
             <DeletePostDialog
